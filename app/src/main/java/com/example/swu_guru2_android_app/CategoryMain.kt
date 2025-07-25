@@ -4,11 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.hometraing.SelectExercise
 
 class CategoryMain : AppCompatActivity {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) // 메인 화면 레이아웃
+        setContentView(R.layout.activity_main) // 카테고리 메인 화면 레이아웃
 
         val btnGoSelectExercise: Button = findViewById(R.id.btn_go_select_exercise)
 
