@@ -6,7 +6,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hometraing.SelectExercise
 
-class CategoryMain : AppCompatActivity {
+class CategoryMain : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.exercise_select_main) // 카테고리 메인 화면 레이아웃
