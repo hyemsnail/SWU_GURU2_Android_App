@@ -18,4 +18,8 @@ class SearchMain {
                 delay(300)
                 val query = s?.toString()?.lowercase()?.trim() ?: ""
                 val filtered = originalList.filter { ex ->
+                }
+            }
+        }
+    }
 }
