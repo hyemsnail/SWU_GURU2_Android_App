@@ -1,4 +1,4 @@
-package com.example.hometraing
+package com.example.swu_guru2_android_app
 
 import android.os.Bundle
 import android.widget.Button
@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.app.AlertDialog
+import com.example.hometraing.Exercise
+import com.example.swu_guru2_android_app.SelectedExerciseAdapter
+import com.example.swu_guru2_android_app.ExerciseAdapter
 
 //선택화면
 class SelectExercise : AppCompatActivity() {

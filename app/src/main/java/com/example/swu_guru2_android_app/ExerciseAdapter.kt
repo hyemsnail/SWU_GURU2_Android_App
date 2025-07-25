@@ -1,10 +1,11 @@
-package com.example.hometraing
+package com.example.swu_guru2_android_app
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hometraing.Exercise
 
 
 class ExerciseAdapter(
