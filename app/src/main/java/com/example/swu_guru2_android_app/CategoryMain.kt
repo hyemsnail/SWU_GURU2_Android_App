@@ -9,7 +9,7 @@ import com.example.hometraing.SelectExercise
 class CategoryMain : AppCompatActivity {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) // 카테고리 메인 화면 레이아웃
+        setContentView(R.layout.exercise_select_main) // 카테고리 메인 화면 레이아웃
 
         val btnGoSelectExercise: Button = findViewById(R.id.btn_go_select_exercise)
 
