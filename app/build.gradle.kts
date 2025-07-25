@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.swu_guru2_android_app"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.swu_guru2_android_app"
