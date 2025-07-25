@@ -18,6 +18,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.example.hometraing.Exercise
+import com.example.swu_guru2_android_app.R
+import com.example.swu_guru2_android_app.SelectedExerciseAdapter
+
 
 
 //선택화면
