@@ -7,9 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.app.AlertDialog
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.TextView
+import android.text.TextWatcher
+import android.text.Editable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import com.example.hometraing.Exercise
-import com.example.swu_guru2_android_app.SelectedExerciseAdapter
-import com.example.swu_guru2_android_app.ExerciseAdapter
+
 
 //선택화면
 class SelectExercise : AppCompatActivity() {
@@ -22,6 +31,24 @@ class SelectExercise : AppCompatActivity() {
     private val allExercises = mutableListOf<Exercise>() // 모든 운동 데이터를 저장할 리스트
     private val selectedExercises = mutableListOf<Exercise>() //사용자 선택한 운동 저장 리스트
 
+    //요일 UI요소
+    private lateinit var cbMon: CheckBox
+    private lateinit var cbTue: CheckBox
+    private lateinit var cbWed: CheckBox
+    private lateinit var cbThu: CheckBox
+    private lateinit var cbFri: CheckBox
+    private lateinit var cbSat: CheckBox
+    private lateinit var cbSun: CheckBox
+    private lateinit var tvSelectedDays: TextView
+
+    private val selectedDays = mutableListOf<String>()
+
+    // 검색 기능 관련
+    private lateinit var searchEditText: EditText
+    private var searchJob: Job? = null
+    private var currentDisplayedCategory: String = "전체" // 초기 화면은 모든 운동을 보여주도록 "전체"로 설정
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_exercise)
@@ -31,7 +58,23 @@ class SelectExercise : AppCompatActivity() {
         val btnAbs: Button = findViewById(R.id.btn_abs)
         val btnLowerBody: Button = findViewById(R.id.btn_lower_body)
         val btnFullBody: Button = findViewById(R.id.btn_full_body)
+        val btnAllExercises: Button = findViewById(R.id.btn_all_exercises) // **새로 추가된 "전체" 버튼 초기화**
+
         recyclerView = findViewById(R.id.recycler_view_exercises)
+        searchEditText = findViewById(R.id.searchEditText)
+
+        // 요일 체크박스 초기화
+        cbMon = findViewById(R.id.cb_mon)
+        cbTue = findViewById(R.id.cb_tue)
+        cbWed = findViewById(R.id.cb_wed)
+        cbThu = findViewById(R.id.cb_thu)
+        cbFri = findViewById(R.id.cb_fri)
+        cbSat = findViewById(R.id.cb_sat)
+        cbSun = findViewById(R.id.cb_sun)
+        tvSelectedDays = findViewById(R.id.tv_selected_days)
+
+        // 요일 체크박스 리스너 설정
+        setupDayCheckBoxListeners()
 
         // RecyclerView 설정
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -41,34 +84,97 @@ class SelectExercise : AppCompatActivity() {
         selectedExercisesRecyclerView.layoutManager = LinearLayoutManager(this)
         selectedExerciseAdapter = SelectedExerciseAdapter(selectedExercises) {
                 exercise ->
-            // 선택된 운동 항목 클릭 시 삭제
             selectedExercises.remove(exercise)
             Toast.makeText(this, "${exercise.name}이(가) 선택 목록에서 삭제되었습니다.", Toast.LENGTH_SHORT).show()
             selectedExerciseAdapter.updateList()
-        }// 선택된 운동 리스트 전달
+        }
         selectedExercisesRecyclerView.adapter = selectedExerciseAdapter
 
-        // 모든 운동 데이터 초기화 (실제 앱에서는 데이터베이스 등에서 가져옴)
+        // 모든 운동 데이터 초기화
         initAllExercises()
 
         // 버튼 클릭 리스너 설정
         btnUpperBody.setOnClickListener {
-            displayExercises("상체")
+            currentDisplayedCategory = "상체"
+            displayExercises(currentDisplayedCategory)
+            searchEditText.text.clear()
         }
         btnAbs.setOnClickListener {
-            displayExercises("복근")
+            currentDisplayedCategory = "복근"
+            displayExercises(currentDisplayedCategory)
+            searchEditText.text.clear()
         }
         btnLowerBody.setOnClickListener {
-            displayExercises("하체")
+            currentDisplayedCategory = "하체"
+            displayExercises(currentDisplayedCategory)
+            searchEditText.text.clear()
         }
         btnFullBody.setOnClickListener {
-            displayExercises("전신")
+            currentDisplayedCategory = "전신" // "전신" 카테고리만 표시
+            displayExercises(currentDisplayedCategory)
+            searchEditText.text.clear()
+        }
+        btnAllExercises.setOnClickListener { // **새로 추가된 "전체" 버튼 리스너**
+            currentDisplayedCategory = "전체" // "전체" 카테고리로 설정
+            displayExercises(currentDisplayedCategory) // 모든 운동을 보여주도록 호출
+            searchEditText.text.clear()
         }
 
-        // 초기 화면에 상체 운동 표시 (선택 사항)
-        displayExercises("상체")
+        // 초기 화면에 모든 운동 표시
+        displayExercises(currentDisplayedCategory)
         selectedExerciseAdapter.updateList()
+
+        // 검색 기능 (TextWatcher)
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                searchJob?.cancel()
+                searchJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(300)
+                    val query = s?.toString()?.lowercase()?.trim() ?: ""
+                    filterExercises(query)
+                }
+            }
+        })
     }
+
+    // 요일 체크박스 리스너 설정 함수
+    private fun setupDayCheckBoxListeners() {
+        val dayCheckBoxes = listOf(cbMon, cbTue, cbWed, cbThu, cbFri, cbSat, cbSun)
+        val dayNames = listOf("월", "화", "수", "목", "금", "토", "일")
+
+        dayCheckBoxes.forEachIndexed { index, checkBox ->
+            checkBox.setOnCheckedChangeListener { _, isChecked ->
+                val day = dayNames[index]
+                if (isChecked) {
+                    if (!selectedDays.contains(day)) {
+                        selectedDays.add(day)
+                    }
+                } else {
+                    selectedDays.remove(day)
+                }
+                updateSelectedDaysText()
+            }
+        }
+    }
+
+    // 선택된 요일 텍스트를 업데이트하는 함수
+    private fun updateSelectedDaysText() {
+        if (selectedDays.isEmpty()) {
+            tvSelectedDays.text = "선택된 요일: 없음"
+        } else {
+            val sortedDays = selectedDays.sortedWith(compareBy {
+                when (it) {
+                    "월" -> 0; "화" -> 1; "수" -> 2; "목" -> 3; "금" -> 4; "토" -> 5; "일" -> 6
+                    else -> 7
+                }
+            })
+            tvSelectedDays.text = "선택된 요일: ${sortedDays.joinToString(", ")}"
+        }
+    }
+
 
     // 모든 운동 데이터를 초기화하는 함수
     private fun initAllExercises() {
@@ -89,45 +195,74 @@ class SelectExercise : AppCompatActivity() {
         allExercises.add(Exercise("마운틴 클라이머", "전신", "코어와 하체를 동시에 사용하는 유산소성 전신 운동입니다.", "60초", "약 12~15 kcal"))
     }
 
-    // 선택된 카테고리에 해당하는 운동 목록을 RecyclerView에 표시하는 함수
+    // 선택된 카테고리 또는 모든 운동 목록을 RecyclerView에 표시하는 함수
     private fun displayExercises(category: String) {
-        val filteredExercises = allExercises.filter { it.category == category }
-        exerciseAdapter = ExerciseAdapter(filteredExercises) { exercise ->
-            // 운동 항목 클릭 시 동작 (팝업)
+        val exercisesToDisplay = if (category == "전체") { // "전체" 카테고리일 경우
+            allExercises // 모든 운동을 보여줍니다.
+        } else {
+            allExercises.filter { it.category == category } // 해당 카테고리 운동만 보여줍니다.
+        }
+
+        exerciseAdapter = ExerciseAdapter(exercisesToDisplay) { exercise ->
             showExerciseDetailPopup(exercise)
         }
         recyclerView.adapter = exerciseAdapter
     }
 
+    // 검색 쿼리에 따라 운동 목록을 필터링하는 함수
+    private fun filterExercises(query: String) {
+        val filteredList = if (query.isEmpty()) {
+            // 쿼리가 비어있을 때: 현재 표시된 카테고리에 따라 필터링
+            if (currentDisplayedCategory == "전체") {
+                allExercises // "전체" 카테고리일 때 모든 운동 표시
+            } else {
+                allExercises.filter { it.category == currentDisplayedCategory } // 특정 카테고리 운동 표시
+            }
+        } else {
+            // 쿼리가 있을 때: 현재 표시된 카테고리 내에서 검색
+            if (currentDisplayedCategory == "전체") {
+                allExercises.filter { it.name.lowercase().contains(query) } // 전체 운동에서 이름으로 검색
+            } else {
+                allExercises.filter {
+                    it.category == currentDisplayedCategory && it.name.lowercase().contains(query)
+                }
+            }
+        }
+
+        if (!::exerciseAdapter.isInitialized) {
+            exerciseAdapter = ExerciseAdapter(emptyList()) { exercise ->
+                showExerciseDetailPopup(exercise)
+            }
+            recyclerView.adapter = exerciseAdapter
+        }
+        exerciseAdapter.updateList(filteredList)
+    }
+
 
     private fun showExerciseDetailPopup(exercise: Exercise) {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle(exercise.name) // 팝업 제목 (운동 이름)
+        builder.setTitle(exercise.name)
 
-        // 팝업에 표시할 상세 내용 구성
         val details = """
             ${exercise.description}
             
             ⏱️ **운동 시간:** ${exercise.duration}
             🔥 **예상 소모 칼로리:** ${exercise.caloriesBurned}
-        """.trimIndent() // trimIndent()로 들여쓰기 제거
+        """.trimIndent()
 
-        builder.setMessage(details) // 구성된 상세 내용을 팝업 내용으로 설정
+        builder.setMessage(details)
 
-        //확인 버튼(팝업 닫기)
         builder.setPositiveButton("닫기") { dialog, _ ->
             dialog.dismiss()
         }
 
-        //선택 버튼
         builder.setNegativeButton("선택") { dialog, _ ->
             if (selectedExercises.contains(exercise)) {
                 Toast.makeText(this, "${exercise.name}은(는) 이미 선택되었습니다.", Toast.LENGTH_SHORT).show()
             } else {
                 selectedExercises.add(exercise)
                 Toast.makeText(this, "${exercise.name}이(가) 선택 목록에 추가되었습니다.", Toast.LENGTH_SHORT).show()
-                // 선택된 운동 목록이 변경되었음을 어댑터에 알림
-                selectedExerciseAdapter.updateList() //
+                selectedExerciseAdapter.updateList()
             }
             dialog.dismiss()
         }
