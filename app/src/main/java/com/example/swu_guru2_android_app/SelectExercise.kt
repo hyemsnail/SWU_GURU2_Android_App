@@ -1,6 +1,6 @@
 package com.example.swu_guru2_android_app
 
-import com.example.hometraing.ViewScheduleActivity
+import com.example.swu_guru2_android_app.ViewScheduleActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
