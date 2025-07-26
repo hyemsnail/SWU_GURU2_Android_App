@@ -193,5 +193,17 @@
             android:background="#673AB7"
             android:backgroundTint="#673AB7"
             android:scrollbars="vertical" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="저장하기"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:background="#8B5AE4"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp" />
     </LinearLayout>
 </ScrollView>

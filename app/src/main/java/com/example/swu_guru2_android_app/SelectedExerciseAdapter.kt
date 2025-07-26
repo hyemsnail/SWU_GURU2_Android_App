@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hometraing.Exercise
+import com.example.swu_guru2_android_app.Exercise
 
 class SelectedExerciseAdapter(
     private val selectedExerciseList: MutableList<Exercise>,

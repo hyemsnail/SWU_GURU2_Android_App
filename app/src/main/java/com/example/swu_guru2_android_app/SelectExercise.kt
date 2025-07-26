@@ -1,5 +1,6 @@
-package com.example.swu_guru2_android_app
+package com.example.hometraing
 
+import com.example.hometraing.ViewScheduleActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
@@ -7,20 +8,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.app.AlertDialog
+import android.content.Intent
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.text.TextWatcher
 import android.text.Editable
+import android.util.Log
+import com.example.swu_guru2_android_app.DBManager
+import com.example.swu_guru2_android_app.Exercise
+import com.example.swu_guru2_android_app.ExerciseAdapter
+import com.example.swu_guru2_android_app.R
+import com.example.swu_guru2_android_app.SelectedExerciseAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.example.hometraing.Exercise
-import com.example.swu_guru2_android_app.R
-import com.example.swu_guru2_android_app.SelectedExerciseAdapter
-
 
 
 //선택화면
@@ -56,12 +60,15 @@ class SelectExercise : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_exercise)
 
+        val dbManager = DBManager(this)  // DBManager 인스턴스 생성
+
         // UI 요소 초기화
         val btnUpperBody: Button = findViewById(R.id.btn_upper_body)
         val btnAbs: Button = findViewById(R.id.btn_abs)
         val btnLowerBody: Button = findViewById(R.id.btn_lower_body)
         val btnFullBody: Button = findViewById(R.id.btn_full_body)
         val btnAllExercises: Button = findViewById(R.id.btn_all_exercises) // **새로 추가된 "전체" 버튼 초기화**
+        val btnSave: Button = findViewById(R.id.btnSave)
 
         recyclerView = findViewById(R.id.recycler_view_exercises)
         searchEditText = findViewById(R.id.searchEditText)
@@ -141,6 +148,37 @@ class SelectExercise : AppCompatActivity() {
                 }
             }
         })
+
+        btnSave.setOnClickListener { //저장 버튼 클릭 시: 선택된 요일과 운동을 데이터베이스에 저장
+            if (selectedExercises.isEmpty() || selectedDays.isEmpty()) {
+                Toast.makeText(this, "요일과 운동을 모두 선택해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            for (day in selectedDays) {
+                val existingSchedules = dbManager.getAllSchedules()
+                val maxSetIndex = existingSchedules
+                    .find { it.day == day }
+                    ?.sets
+                    ?.size ?: 0  // 없으면 0
+
+                for ((index, exercise) in selectedExercises.withIndex()) {
+                    dbManager.insertSchedule(day, exercise, maxSetIndex)
+                }
+            }
+
+
+
+            Toast.makeText(this, "운동 스케줄이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+
+            //화면 전환 코드 추가
+            val intent = Intent(this, ViewScheduleActivity::class.java)
+            Log.d("BTN_CLICK", "스케줄 보기로 이동 시도")
+
+            startActivity(intent)
+            finish()
+        }
+
     }
 
     // 요일 체크박스 리스너 설정 함수

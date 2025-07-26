@@ -1,4 +1,4 @@
-package com.example.hometraing
+package com.example.swu_guru2_android_app
 
 import kotlin.time.Duration
 

@@ -6,16 +6,16 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hometraing.SelectExercise
 
+class SelectStartActivity : AppCompatActivity() {
 
-class CategoryMain : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.exercise_select_main) // 카테고리 메인 화면 레이아웃
+        setContentView(R.layout.select_start_main)  // 레이아웃은 그대로 쓸 수 있음
 
         val btnGoSelectExercise: Button = findViewById(R.id.btn_go_select_exercise)
 
         btnGoSelectExercise.setOnClickListener {
-            val intent = Intent(this, SelectExercise::class.java) // SelectExercise 클래스 참조
+            val intent = Intent(this, SelectExercise::class.java)
             startActivity(intent)
         }
     }
