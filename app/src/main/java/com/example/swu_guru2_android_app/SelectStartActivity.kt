@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.hometraing.SelectExercise
+import com.example.swu_guru2_android_app.SelectExercise
 
 class SelectStartActivity : AppCompatActivity() {
 
