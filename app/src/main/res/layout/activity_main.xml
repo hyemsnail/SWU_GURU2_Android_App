@@ -12,21 +12,29 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="306dp"
-        android:layout_height="329dp"
+        android:layout_width="328dp"
+        android:layout_height="381dp"
         app:srcCompat="@drawable/ic_fitfit_icon_app" />
 
     <Button
         android:id="@+id/btn_go_select_exercise"
-        android:layout_width="146dp"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
         android:text="운동 선택하기" />
 
     <Button
         android:id="@+id/btn_go_select_exercise2"
-        android:layout_width="wrap_content"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:text="나의 운동 계획표" />
+        android:text="운동 계획표 확인하기" />
+
+    <Button
+        android:id="@+id/btn_go_start_exercise"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:text="운동 시작하기"
+        android:textColorLink="#FCF5FD"
+        app:iconTint="#826AB1" />
 
 
 </LinearLayout>
