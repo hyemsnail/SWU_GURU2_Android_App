@@ -25,7 +25,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import android.graphics.Color
 
 //선택화면
 class SelectExercise : AppCompatActivity() {
@@ -46,7 +48,7 @@ class SelectExercise : AppCompatActivity() {
     private lateinit var cbFri: CheckBox
     private lateinit var cbSat: CheckBox
     private lateinit var cbSun: CheckBox
-    private lateinit var tvSelectedDays: TextView
+    private lateinit var chipGroupSelectedDays: ChipGroup
 
     private val selectedDays = mutableListOf<String>()
 
@@ -82,7 +84,7 @@ class SelectExercise : AppCompatActivity() {
         cbFri = findViewById(R.id.cb_fri)
         cbSat = findViewById(R.id.cb_sat)
         cbSun = findViewById(R.id.cb_sun)
-        tvSelectedDays = findViewById(R.id.tv_selected_days)
+        chipGroupSelectedDays = findViewById(R.id.chip_group_selected_days)
 
         // 요일 체크박스 리스너 설정
         setupDayCheckBoxListeners()
@@ -194,15 +196,18 @@ class SelectExercise : AppCompatActivity() {
                 } else {
                     selectedDays.remove(day)
                 }
-                updateSelectedDaysText()
+                updateSelectedDaysChips()
             }
         }
     }
 
     // 선택된 요일 텍스트를 업데이트하는 함수
-    private fun updateSelectedDaysText() {
+    private fun updateSelectedDaysChips() {
+        chipGroupSelectedDays.removeAllViews()
+
+        val dayNames = listOf("월", "화", "수", "목", "금", "토", "일")
+
         if (selectedDays.isEmpty()) {
-            tvSelectedDays.text = "선택된 요일: 없음"
         } else {
             val sortedDays = selectedDays.sortedWith(compareBy {
                 when (it) {
@@ -210,7 +215,23 @@ class SelectExercise : AppCompatActivity() {
                     else -> 7
                 }
             })
-            tvSelectedDays.text = "선택된 요일: ${sortedDays.joinToString(", ")}"
+            sortedDays.forEach { day ->
+                val chip = Chip(this).apply {
+                    text = day
+                    isCloseIconVisible = true
+                    setTextColor(Color.parseColor("#673AB7"))
+                    setOnCloseIconClickListener {
+                        selectedDays.remove(day)
+                        (it.parent as ChipGroup).removeView(it)
+                        val dayIndex = dayNames.indexOf(day)
+                        if (dayIndex != -1) {
+                            val dayCheckBoxes = listOf(cbMon, cbTue, cbWed, cbThu, cbFri, cbSat, cbSun)
+                            dayCheckBoxes[dayIndex].isChecked = false
+                        }
+                    }
+                }
+                chipGroupSelectedDays.addView(chip)
+            }
         }
     }
 

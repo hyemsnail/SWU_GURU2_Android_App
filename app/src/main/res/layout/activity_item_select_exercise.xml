@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:textColor="@android:color/white"
+        android:textColor="#673AB7"
         tools:text="선택된 운동 이름 (예: 푸쉬업)"/>
 
 

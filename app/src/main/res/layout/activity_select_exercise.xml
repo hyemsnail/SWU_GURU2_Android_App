@@ -220,7 +220,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="메인화면으로"
+                android:text="메인 화면으로"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:layout_marginEnd="8dp" />
