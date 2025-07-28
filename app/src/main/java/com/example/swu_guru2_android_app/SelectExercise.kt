@@ -262,10 +262,10 @@ class SelectExercise : AppCompatActivity() {
         } else {
             // 쿼리가 있을 때: 현재 표시된 카테고리 내에서 검색
             if (currentDisplayedCategory == "전체") {
-                allExercises.filter { it.name.lowercase().contains(query) } // 전체 운동에서 이름으로 검색
+                allExercises.filter { it.name!!.lowercase().contains(query) } // 전체 운동에서 이름으로 검색
             } else {
                 allExercises.filter {
-                    it.category == currentDisplayedCategory && it.name.lowercase().contains(query)
+                    it.category == currentDisplayedCategory && it.name!!.lowercase().contains(query)
                 }
             }
         }

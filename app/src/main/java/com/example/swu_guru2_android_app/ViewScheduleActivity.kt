@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.swu_guru2_android_app.DBManager
 import com.example.swu_guru2_android_app.R
 import com.example.swu_guru2_android_app.ScheduleAdapter
-import com.example.swu_guru2_android_app.SelectStartActivity
+import kotlinx.coroutines.MainScope
 
 class ViewScheduleActivity : AppCompatActivity() {
 
@@ -42,7 +42,7 @@ class ViewScheduleActivity : AppCompatActivity() {
         //"처음으로" 버튼 클릭 리스너
         val backBtn = findViewById<Button>(R.id.btnBackToMain)
         backBtn.setOnClickListener {
-            val intent = Intent(this, SelectStartActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
 

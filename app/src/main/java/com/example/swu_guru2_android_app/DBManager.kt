@@ -1,11 +1,12 @@
-package com.example.swu_guru2_android_app  // ← 실제 패키지명에 맞게 수정
+package com.example.swu_guru2_android_app
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.example.swu_guru2_android_app.Exercise
 import com.example.swu_guru2_android_app.ScheduleItem
+import com.example.swu_guru2_android_app.Exercise
+import com.example.swu_guru2_android_app.GroupedScheduleItem
 
 class DBManager(context: Context) : SQLiteOpenHelper(context, "exerciseDB", null, 1) {
 
