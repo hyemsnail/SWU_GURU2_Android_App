@@ -10,7 +10,7 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DBManager.DATABASE
     // 데이터베이스 상수를 위한 companion object 추가
     companion object {
         private const val DATABASE_NAME = "exerciseDB"
-        private const val DATABASE_VERSION = 2 // <--- 중요: 이 버전을 1에서 2로 증가시킵니다!
+        private const val DATABASE_VERSION = 2
 
         // 테이블 및 컬럼 이름
         private const val TABLE_NAME = "ExerciseSchedule"

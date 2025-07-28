@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.Toast
+import android.widget.TextView
+
+
+
 
 class ViewScheduleActivity : AppCompatActivity() {
 
@@ -28,19 +32,25 @@ class ViewScheduleActivity : AppCompatActivity() {
         val dbManager = DBManager(this)
         val scheduleList = dbManager.getAllSchedules()
 
-        val groupedList = scheduleList
-            .sortedWith(compareBy { dayOrder[it.day] ?: 99 })
+        val sortedAndGroupedList = scheduleList
+            .sortedWith(compareBy { dayOrder[it.day] ?: 99 }) // 요일별 정렬은 유지
             .toMutableList()
 
-        val adapter = ScheduleAdapter(groupedList, dbManager) { scheduleItems ->
-            // 사용자가 세트를 선택했을 때 호출될 람다 함수
-            selectedWorkoutSet = scheduleItems // 선택된 세트의 운동 목록을 저장
+        val selectedSetInfoTextView = findViewById<TextView>(R.id.tv_selected_set_info)
+
+        val adapter = ScheduleAdapter(sortedAndGroupedList, dbManager) { scheduleItems ->
+            selectedWorkoutSet = scheduleItems
 
             val toastMessage = scheduleItems.firstOrNull()?.let { item ->
                 val day = item.day ?: "알 수 없음"
                 val setNumber = item.setIndex + 1
+                // ✅ 선택 정보 표시 업데이트
+                selectedSetInfoTextView.text = "선택된 세트: ${day}요일 ${setNumber}번째 세트"
                 "선택된 세트: ${day} ${setNumber}번째 세트가 선택되었습니다."
-            } ?: "선택된 세트 정보 없음"
+            } ?: run {
+                selectedSetInfoTextView.text = "선택된 세트 없음"
+                "선택된 세트 정보 없음"
+            }
 
             Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
             Log.d("ViewScheduleActivity", "선택된 세트 저장됨: ${scheduleItems.joinToString { it.exerciseName ?: "" }}")
@@ -56,11 +66,9 @@ class ViewScheduleActivity : AppCompatActivity() {
             // selectedWorkoutSet에 저장된 운동이 있을 때만 다음화면 시작
             if (selectedWorkoutSet != null && selectedWorkoutSet!!.isNotEmpty()) {
                 val exercisesToStart = ArrayList(selectedWorkoutSet!!.map {
-                    // Exercise 데이터 클래스의 생성자 매개변수 순서에 맞게 값을 전달합니다.
-                    // ScheduleItem에 category 정보가 없다면, 빈 문자열 ""을 전달합니다.
                     Exercise(
                         name = it.exerciseName ?: "",
-                        category = "", // ScheduleItem에 category 필드가 없으므로 빈 문자열 전달
+                        category = it.category ?: "",
                         description = it.description ?: "",
                         duration = it.duration ?: "",
                         caloriesBurned = it.calories ?: ""

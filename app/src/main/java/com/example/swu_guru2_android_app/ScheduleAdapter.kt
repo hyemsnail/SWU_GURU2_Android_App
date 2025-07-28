@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 class ScheduleAdapter(
     private var scheduleList: MutableList<GroupedScheduleItem>,
     private val dbManager: DBManager,
-    private val onSetSelected: (List<ScheduleItem>) -> Unit // ★ 이 람다는 유지합니다.
+    private val onSetSelected: (List<ScheduleItem>) -> Unit
 ) : RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder>() {
 
     class ScheduleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -20,7 +20,7 @@
         android:id="@+id/btn_go_select_exercise"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:text="운동 선택하기" />
+        android:text="운동 계획하기" />
 
     <Button
         android:id="@+id/btn_go_select_exercise2"

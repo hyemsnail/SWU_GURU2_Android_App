@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
+
 class StretchingActivity : AppCompatActivity() {
 
     private lateinit var tvStretchingIntro: TextView
@@ -20,9 +21,9 @@ class StretchingActivity : AppCompatActivity() {
     private var selectedExercises: ArrayList<Exercise>? = null
 
     // 유튜브 영상 ID를 넣어주세요.
-    // 실제 영상 ID는 'watch?v=' 뒤에 오는 문자열입니다. (예: https://www.youtube.com/watch?v=5_Qzs8_IG-M)
-    private val YOUTUBE_VIDEO_ID = "5_Qzs8_IG-M" //  실제 영상 ID
-    private val YOUTUBE_EMBED_URL = "https://www.youtube.com/embed/$YOUTUBE_VIDEO_ID?autoplay=1"
+    private val YOUTUBE_VIDEO_ID = "5_Qzs8_IG-M" // 실제 영상 ID
+    // 유튜브 임베드 URL
+    private val YOUTUBE_EMBED_URL = "https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +35,6 @@ class StretchingActivity : AppCompatActivity() {
         webViewStretching = findViewById(R.id.web_view_stretching)
         btnStartWorkout = findViewById(R.id.btn_start_workout)
 
-        // SelectExercise에서 전달받은 운동 목록
         selectedExercises = intent.getParcelableArrayListExtra("selectedExercises")
 
         // 초기 UI 상태 설정
@@ -44,14 +44,14 @@ class StretchingActivity : AppCompatActivity() {
         btnStartWorkout.visibility = View.GONE
 
         // 웹뷰 설정
-        webViewStretching.settings.javaScriptEnabled = true // JavaScript 활성화 (유튜브 영상 재생에 필요)
+        webViewStretching.settings.javaScriptEnabled = true
         webViewStretching.settings.loadWithOverviewMode = true
         webViewStretching.settings.useWideViewPort = true
-        webViewStretching.webChromeClient = WebChromeClient() // 전체 화면 재생 등을 위한 클라이언트 설정
+        webViewStretching.webChromeClient = WebChromeClient()
         webViewStretching.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                // 페이지 로딩 완료 후 운동 시작 버튼 표시 (선택 사항: 영상 재생 완료를 감지하는 더 복잡한 로직이 필요할 수 있음)
+                // 페이지 로딩 완료 후 운동 시작 버튼 표시
                 btnStartWorkout.visibility = View.VISIBLE
             }
         }
