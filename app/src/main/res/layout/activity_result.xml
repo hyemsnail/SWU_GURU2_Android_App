@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -44,16 +45,22 @@
         android:textStyle="bold"
         android:layout_marginBottom="40dp"/>
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="166dp"
+        android:layout_height="130dp"
+        app:srcCompat="@drawable/ic_fitfit_icon_app" />
+
     <Button
         android:id="@+id/btn_back_to_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="메인 화면으로"
-        android:textSize="18sp"
         android:paddingStart="30dp"
-        android:paddingEnd="30dp"
         android:paddingTop="15dp"
+        android:paddingEnd="30dp"
         android:paddingBottom="15dp"
-        android:textColor="@android:color/white"/>
+        android:text="메인 화면으로"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
 
 </LinearLayout>

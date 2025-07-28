@@ -162,48 +162,78 @@
             android:scrollbars="vertical"
             android:nestedScrollingEnabled="true"/>
 
-        <TextView
-            android:id="@+id/tv_selected_days"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="8dp"
-            android:background="#673AB7"
-            android:backgroundTint="#8B5AE4"
-            android:text="선택된 요일: "
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"/>
+            android:orientation="vertical"
+            android:layout_marginTop="24dp"
+            android:background="#F0F0F0"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
-        <TextView
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="선택된 요일:"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_selected_days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="8dp"
+                android:text="선택된 운동:"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_selected_exercises"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@android:color/white" android:padding="8dp"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="8dp"
-            android:background="#7C52CE"
-            android:text="선택된 운동:"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_selected_exercises"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="#673AB7"
-            android:backgroundTint="#673AB7"
-            android:scrollbars="vertical" />
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="저장하기"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:background="#8B5AE4"
-            android:textColor="@android:color/white"
+            android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="30dp" />
+            android:layout_marginBottom="30dp">
+
+            <Button
+                android:id="@+id/btnGoToMain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="메인화면으로"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_marginEnd="8dp" />
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="운동 세트 저장하기"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

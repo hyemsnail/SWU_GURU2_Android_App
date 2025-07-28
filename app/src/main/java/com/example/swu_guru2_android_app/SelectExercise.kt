@@ -67,8 +67,9 @@ class SelectExercise : AppCompatActivity() {
         val btnAbs: Button = findViewById(R.id.btn_abs)
         val btnLowerBody: Button = findViewById(R.id.btn_lower_body)
         val btnFullBody: Button = findViewById(R.id.btn_full_body)
-        val btnAllExercises: Button = findViewById(R.id.btn_all_exercises) // **새로 추가된 "전체" 버튼 초기화**
+        val btnAllExercises: Button = findViewById(R.id.btn_all_exercises)
         val btnSave: Button = findViewById(R.id.btnSave)
+        val btnGoToMain: Button = findViewById(R.id.btnGoToMain) // Initialize the new button
 
         recyclerView = findViewById(R.id.recycler_view_exercises)
         searchEditText = findViewById(R.id.searchEditText)
@@ -166,19 +167,16 @@ class SelectExercise : AppCompatActivity() {
                     dbManager.insertSchedule(day, exercise, maxSetIndex)
                 }
             }
-
-
-
-            Toast.makeText(this, "운동 스케줄이 저장되었습니다.", Toast.LENGTH_SHORT).show()
-
-            //화면 전환 코드 추가
-            val intent = Intent(this, ViewScheduleActivity::class.java)
-            Log.d("BTN_CLICK", "스케줄 보기로 이동 시도")
-
-            startActivity(intent)
-            finish()
+            Toast.makeText(this, "운동 세트가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+            // Removed the Intent to ViewScheduleActivity
         }
 
+        // New button click listener for "Go to Main"
+        btnGoToMain.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java) // Assuming your main activity is MainActivity
+            startActivity(intent)
+            finish() // Finish this activity so the user doesn't come back to it on back press
+        }
     }
 
     // 요일 체크박스 리스너 설정 함수
@@ -286,7 +284,7 @@ class SelectExercise : AppCompatActivity() {
 
         val details = """
             ${exercise.description}
-            
+
             ⏱️ **운동 시간:** ${exercise.duration}
             🔥 **예상 소모 칼로리:** ${exercise.caloriesBurned}
         """.trimIndent()
