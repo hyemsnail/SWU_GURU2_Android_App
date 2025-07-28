@@ -7,15 +7,11 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-// import com.example.swu_guru2_android_app.R
-// import com.example.swu_guru2_android_app.GroupedScheduleItem
-// import com.example.swu_guru2_android_app.ScheduleItem
-// import com.example.swu_guru2_android_app.DBManager
 
 class ScheduleAdapter(
     private var scheduleList: MutableList<GroupedScheduleItem>,
     private val dbManager: DBManager,
-    private val onSetSelected: (List<ScheduleItem>) -> Unit
+    private val onSetSelected: (List<ScheduleItem>) -> Unit // ★ 이 람다는 유지합니다.
 ) : RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder>() {
 
     class ScheduleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -34,7 +30,6 @@ class ScheduleAdapter(
         holder.dayText.text = groupedItem.day
         holder.exerciseContainer.removeAllViews()
 
-        // 각 세트별로 UI 요소 생성 및 리스너 설정
         groupedItem.sets.forEachIndexed { setIndex, exerciseSet ->
             // 세트 제목 (예: "세트 1")
             val setTitle = TextView(holder.itemView.context).apply {
@@ -44,6 +39,7 @@ class ScheduleAdapter(
             }
             holder.exerciseContainer.addView(setTitle)
 
+            // 버튼들을 담을 수평 LinearLayout 추가
             val buttonLayout = LinearLayout(holder.itemView.context).apply {
                 orientation = LinearLayout.HORIZONTAL
                 layoutParams = LinearLayout.LayoutParams(
@@ -52,42 +48,37 @@ class ScheduleAdapter(
                 )
             }
 
-            // 세트 시작 버튼 (각 세트별로 생성)
+            // "이 세트 운동 시작" 버튼
             val startSetButton = Button(holder.itemView.context).apply {
-                text = "운동 선택"
+                text = "이 세트 운동 선택" // ★ 텍스트를 "이 세트 운동 선택"으로 변경
                 layoutParams = LinearLayout.LayoutParams(
-                    0, // width를 0으로 설정하고 weight 부여
+                    0,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    weight = 1f // 왼쪽 공간을 차지하도록
-                    setMargins(0, 8, 8, 16) // 마진 조정 (오른쪽 마진 추가)
+                    weight = 1f
+                    setMargins(0, 8, 8, 16)
                 }
             }
-            // 세트 시작 버튼 클릭 리스너
+            // 클릭 시 onSetSelected 람다를 호출하여 ViewScheduleActivity에 선택 정보 전달
             startSetButton.setOnClickListener {
-                onSetSelected(exerciseSet) // 해당 세트의 운동 목록을 콜백으로 전달
+                onSetSelected(exerciseSet)
             }
             buttonLayout.addView(startSetButton)
 
-            // "세트 삭제" 버튼 (각 세트별로)
+            // "세트 삭제" 버튼
             val deleteSetButton = Button(holder.itemView.context).apply {
-                text = "세트 삭제" // "삭제"에서 "세트 삭제"로 텍스트 변경
+                text = "세트 삭제"
                 layoutParams = LinearLayout.LayoutParams(
-                    0, // width를 0으로 설정하고 weight 부여
+                    0,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    weight = 1f // 오른쪽 공간을 차지하도록
-                    setMargins(8, 8, 0, 16) // 마진 조정 (왼쪽 마진 추가)
+                    weight = 1f
+                    setMargins(8, 8, 0, 16)
                 }
             }
             deleteSetButton.setOnClickListener {
-                // 세트 삭제 로직
-                // 1. DB에서 해당 세트의 모든 운동 삭제
-                //    DBManager에 `deleteSetByDayAndSetIndex` 같은 메서드가 필요할 수 있음
-                //    지금은 각 운동을 개별 삭제하는 방식으로 임시 처리하거나, DBManager에 일괄 삭제 메서드 추가 고려
-                exerciseSet.forEach { item ->
-                    dbManager.deleteSchedule(item.day, item.exerciseName, item.setIndex)
-                }
+                // 1. DB에서 해당 세트의 모든 운동 삭제 (새 메서드 사용)
+                dbManager.deleteScheduleByDayAndSetIndex(groupedItem.day, setIndex)
 
                 // 2. 해당 세트를 리스트에서 제거
                 groupedItem.sets.removeAt(setIndex)
@@ -100,9 +91,9 @@ class ScheduleAdapter(
                     notifyItemChanged(position) // 세트가 변경되었음을 알림
                 }
             }
-            buttonLayout.addView(deleteSetButton) // 버튼 레이아웃에 추가
+            buttonLayout.addView(deleteSetButton)
 
-            holder.exerciseContainer.addView(buttonLayout) // exerciseContainer에 버튼 레이아웃 추가
+            holder.exerciseContainer.addView(buttonLayout)
 
             // 해당 세트의 각 운동 항목 추가
             exerciseSet.forEach { item ->
@@ -112,29 +103,25 @@ class ScheduleAdapter(
                 val nameText = itemView.findViewById<TextView>(R.id.tv_exercise_name)
                 val durationText = itemView.findViewById<TextView>(R.id.tv_duration)
                 val caloriesText = itemView.findViewById<TextView>(R.id.tv_calories)
-                val deleteButton = itemView.findViewById<Button>(R.id.btn_delete_exercise) // 운동 개별 삭제 버튼
+                val deleteButton = itemView.findViewById<Button>(R.id.btn_delete_exercise)
 
                 nameText.text = item.exerciseName
                 durationText.text = item.duration
                 caloriesText.text = item.calories
 
                 deleteButton.setOnClickListener {
-                    // 개별 운동 삭제 로직
                     dbManager.deleteSchedule(item.day, item.exerciseName, item.setIndex)
                     groupedItem.sets[setIndex].remove(item)
 
                     if (groupedItem.sets[setIndex].isEmpty()) {
-                        // 세트 내 마지막 운동 삭제로 세트가 비었을 때
                         groupedItem.sets.removeAt(setIndex)
                         if (groupedItem.sets.isEmpty()) {
-                            // 요일의 모든 세트가 비었을 때
                             scheduleList.removeAt(position)
                             notifyItemRemoved(position)
                         } else {
                             notifyItemChanged(position)
                         }
                     } else {
-                        // 세트 내 운동만 변경되었을 때
                         notifyItemChanged(position)
                     }
                 }
@@ -147,6 +134,6 @@ class ScheduleAdapter(
 
     fun updateData(newList: List<GroupedScheduleItem>) {
         scheduleList = newList.toMutableList()
-        notifyDataSetChanged() // 데이터가 완전히 변경되었을 때 전체 갱신
+        notifyDataSetChanged()
     }
 }

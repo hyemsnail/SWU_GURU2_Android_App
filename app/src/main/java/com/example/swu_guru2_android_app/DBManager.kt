@@ -109,9 +109,9 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, "exerciseDB", null
     }
 
 
-    fun deleteScheduleByDay(day: String) {
+    fun deleteScheduleByDayAndSetIndex(day: String, setIndex: Int) {
         val db = this.writableDatabase
-        db.delete("ExerciseSchedule", "day = ?", arrayOf(day))
+        db.delete("ExerciseSchedule", "day = ? AND setIndex = ?", arrayOf(day, setIndex.toString()))
         db.close()
     }
 }

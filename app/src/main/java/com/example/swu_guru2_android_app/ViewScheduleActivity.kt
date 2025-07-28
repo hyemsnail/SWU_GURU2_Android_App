@@ -8,10 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.Toast
-import com.example.swu_guru2_android_app.DBManager
-import com.example.swu_guru2_android_app.R
-import com.example.swu_guru2_android_app.ScheduleAdapter
-import kotlinx.coroutines.MainScope
 
 class ViewScheduleActivity : AppCompatActivity() {
 
@@ -21,7 +17,8 @@ class ViewScheduleActivity : AppCompatActivity() {
         "목" to 3, "금" to 4, "토" to 5, "일" to 6
     )
 
-    private var selectedWorkoutSet :List<ScheduleItem>? = null
+    // 선택된 세트의 운동 목록을 저장할 변수
+    private var selectedWorkoutSet: List<ScheduleItem>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,37 +28,43 @@ class ViewScheduleActivity : AppCompatActivity() {
         val dbManager = DBManager(this)
         val scheduleList = dbManager.getAllSchedules()
 
-        //
         val groupedList = scheduleList
             .sortedWith(compareBy { dayOrder[it.day] ?: 99 })
             .toMutableList()
 
         val adapter = ScheduleAdapter(groupedList, dbManager) { scheduleItems ->
             // 사용자가 세트를 선택했을 때 호출될 람다 함수
-            selectedWorkoutSet = scheduleItems // 선택된 세트의 운동 목록 저장
-            //선택한 세트 인덱스+1
+            selectedWorkoutSet = scheduleItems // 선택된 세트의 운동 목록을 저장
+
             val toastMessage = scheduleItems.firstOrNull()?.let { item ->
-                val day = item.day
+                val day = item.day ?: "알 수 없음"
                 val setNumber = item.setIndex + 1
-                "선택된 세트: ${day} ${setNumber}번째 세트"
-            } ?: "선택된 세트 정보 없음" // scheduleItems가 비어있거나 firstOrNull이 null일 경우
+                "선택된 세트: ${day} ${setNumber}번째 세트가 선택되었습니다."
+            } ?: "선택된 세트 정보 없음"
 
             Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
-            Log.d("ViewScheduleActivity", "선택된 세트: ${scheduleItems.joinToString { it.exerciseName ?: "" }}")
+            Log.d("ViewScheduleActivity", "선택된 세트 저장됨: ${scheduleItems.joinToString { it.exerciseName ?: "" }}")
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
         Log.d("ACTIVITY_FLOW", "ViewScheduleActivity onCreate 실행됨")
 
-        //운동 시작 버튼
+        // "선택한 운동 시작" 버튼 클릭 리스너
         val btnStartSelectedWorkout = findViewById<Button>(R.id.btnStartSelectedWorkout)
         btnStartSelectedWorkout.setOnClickListener {
+            // selectedWorkoutSet에 저장된 운동이 있을 때만 TrainingActivity 시작
             if (selectedWorkoutSet != null && selectedWorkoutSet!!.isNotEmpty()) {
-                // ScheduleItem 리스트를 Exercise 리스트로 변환 (TrainingActivity에서 Exercise 객체를 받으므로)
                 val exercisesToStart = ArrayList(selectedWorkoutSet!!.map {
-                    // Exercise 데이터 클래스가 category 필드를 가지고 있다고 가정
-                    Exercise(it.exerciseName ?: "", it.description ?: "", it.description ?: "", it.duration ?: "", it.calories ?: "") // description을 category로 사용하지 않는다면 다른 값 전달 필요
+                    // Exercise 데이터 클래스의 생성자 매개변수 순서에 맞게 값을 전달합니다.
+                    // ScheduleItem에 category 정보가 없다면, 빈 문자열 ""을 전달합니다.
+                    Exercise(
+                        name = it.exerciseName ?: "",
+                        category = "", // ScheduleItem에 category 필드가 없으므로 빈 문자열 전달
+                        description = it.description ?: "",
+                        duration = it.duration ?: "",
+                        caloriesBurned = it.calories ?: ""
+                    )
                 })
 
                 val intent = Intent(this, TrainingActivity::class.java).apply {
@@ -79,8 +82,6 @@ class ViewScheduleActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
-
         }
     }
-
 }
