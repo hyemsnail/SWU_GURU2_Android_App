@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.swu_guru2_android_app.Exercise // 패키지명 수정
 
 class TrainingActivity : AppCompatActivity() {
 

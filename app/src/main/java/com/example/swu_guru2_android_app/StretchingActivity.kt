@@ -9,7 +9,6 @@ import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.swu_guru2_android_app.Exercise // 패키지명 수정
 
 class StretchingActivity : AppCompatActivity() {
 
@@ -22,9 +21,8 @@ class StretchingActivity : AppCompatActivity() {
 
     // 유튜브 영상 ID를 넣어주세요.
     // 실제 영상 ID는 'watch?v=' 뒤에 오는 문자열입니다. (예: https://www.youtube.com/watch?v=5_Qzs8_IG-M)
-    private val YOUTUBE_VIDEO_ID = "5_Qzs8_IG-M" // 여기에 실제 영상 ID를 넣어주세요!
-    // 웹뷰에서 임베드할 유튜브 URL 형식입니다.
-    private val YOUTUBE_EMBED_URL = "https://www.youtube.com/embed/$YOUTUBE_VIDEO_ID"
+    private val YOUTUBE_VIDEO_ID = "5_Qzs8_IG-M" //  실제 영상 ID
+    private val YOUTUBE_EMBED_URL = "https://www.youtube.com/embed/$YOUTUBE_VIDEO_ID?autoplay=1"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -53,7 +53,7 @@ class ViewScheduleActivity : AppCompatActivity() {
         // "선택한 운동 시작" 버튼 클릭 리스너
         val btnStartSelectedWorkout = findViewById<Button>(R.id.btnStartSelectedWorkout)
         btnStartSelectedWorkout.setOnClickListener {
-            // selectedWorkoutSet에 저장된 운동이 있을 때만 TrainingActivity 시작
+            // selectedWorkoutSet에 저장된 운동이 있을 때만 다음화면 시작
             if (selectedWorkoutSet != null && selectedWorkoutSet!!.isNotEmpty()) {
                 val exercisesToStart = ArrayList(selectedWorkoutSet!!.map {
                     // Exercise 데이터 클래스의 생성자 매개변수 순서에 맞게 값을 전달합니다.
@@ -67,7 +67,7 @@ class ViewScheduleActivity : AppCompatActivity() {
                     )
                 })
 
-                val intent = Intent(this, TrainingActivity::class.java).apply {
+                val intent = Intent(this, StretchingActivity::class.java).apply {
                     putExtra("selectedExercises", exercisesToStart)
                 }
                 startActivity(intent)
