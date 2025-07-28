@@ -29,5 +29,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ViewScheduleActivity::class.java)  // ✅ 운동 스케줄 화면으로 이동
             startActivity(intent)
         }
+        val goStartBtn = findViewById<Button>(R.id.btn_go_start_exercise)
+        goStartBtn.setOnClickListener {
+            val intent = Intent(this, ViewScheduleActivity::class.java)  // ✅ 운동 스케줄 화면으로 이동
+            startActivity(intent)
+        }
     }
 }
