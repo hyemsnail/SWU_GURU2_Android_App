@@ -21,11 +21,4 @@
         android:orientation="vertical"
         android:layout_marginTop="8dp"/>
 
-    <Button
-        android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="삭제"
-        android:layout_gravity="end"
-        android:layout_marginTop="8dp"/>
 </LinearLayout>
