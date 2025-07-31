@@ -36,6 +36,7 @@
 
 ## 디렉토리 구조
 
+```plaintext
 app/
 ├─ manifests/AndroidManifest.xml
 ├─ java/com/example/swu_guru2_android_app/
@@ -61,7 +62,8 @@ app/
    └─ xml/
        ├─ backup_rules.xml
        └─ data_extraction_rules.xml
-
+```
+---
 
 ## 기술 스택
    - **Kotlin**
