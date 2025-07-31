@@ -39,25 +39,31 @@
 app/
 ├─ manifests/AndroidManifest.xml
 ├─ java/com/example/swu_guru2_android_app/
-│ ├─ SplashActivity.kt
-│ ├─ MainActivity.kt
-│ ├─ SelectExerciseActivity.kt
-│ ├─ ViewScheduleActivity.kt
-│ ├─ ScheduleAdapter.kt
-│ └─ (그 외 DBManager, ExerciseAdapter 등)
+│   ├─ SplashActivity.kt
+│   ├─ MainActivity.kt
+│   ├─ SelectExerciseActivity.kt
+│   ├─ ViewScheduleActivity.kt
+│   ├─ ScheduleAdapter.kt
+│   └─ (그 외 DBManager, ExerciseAdapter 등)
 └─ res/
-├─ layout/
-│ ├─ activity_splash.xml
-│ ├─ activity_main.xml
-│ ├─ activity_select_exercise.xml
-│ ├─ activity_view_schedule.xml
-│ ├─ activity_item_grouped_schedule.xml
-│ └─ item_exercise_with_delete.xml
-├─ drawable/…
-├─ values/colors.xml, strings.xml, themes.xml
-└─ xml/backup_rules.xml, data_extraction_rules.xml
+   ├─ layout/
+   │   ├─ activity_splash.xml
+   │   ├─ activity_main.xml
+   │   ├─ activity_select_exercise.xml
+   │   ├─ activity_view_schedule.xml
+   │   ├─ activity_item_grouped_schedule.xml
+   │   └─ item_exercise_with_delete.xml
+   ├─ drawable/
+   ├─ values/
+   │   ├─ colors.xml
+   │   ├─ strings.xml
+   │   └─ themes.xml
+   └─ xml/
+       ├─ backup_rules.xml
+       └─ data_extraction_rules.xml
+
 
 ## 기술 스택
-  - Kotlin
-  - AndroidX
-  - MVVM 패턴
+   - **Kotlin**
+   - **AndroidX**
+   - **MVVM 패턴**
