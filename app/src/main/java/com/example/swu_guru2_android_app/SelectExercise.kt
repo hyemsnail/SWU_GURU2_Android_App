@@ -11,15 +11,8 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.TextView
 import android.text.TextWatcher
 import android.text.Editable
-import android.util.Log
-import com.example.swu_guru2_android_app.DBManager
-import com.example.swu_guru2_android_app.Exercise
-import com.example.swu_guru2_android_app.ExerciseAdapter
-import com.example.swu_guru2_android_app.R
-import com.example.swu_guru2_android_app.SelectedExerciseAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -55,14 +48,14 @@ class SelectExercise : AppCompatActivity() {
     // 검색 기능 관련
     private lateinit var searchEditText: EditText
     private var searchJob: Job? = null
-    private var currentDisplayedCategory: String = "전체" // 초기 화면은 모든 운동을 보여주도록 "전체"로 설정
+    private var currentDisplayedCategory: String = "전체"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_exercise)
 
-        val dbManager = DBManager(this)  // DBManager 인스턴스 생성
+        val dbManager = DBManager(this)
 
         // UI 요소 초기화
         val btnUpperBody: Button = findViewById(R.id.btn_upper_body)
@@ -71,7 +64,7 @@ class SelectExercise : AppCompatActivity() {
         val btnFullBody: Button = findViewById(R.id.btn_full_body)
         val btnAllExercises: Button = findViewById(R.id.btn_all_exercises)
         val btnSave: Button = findViewById(R.id.btnSave)
-        val btnGoToMain: Button = findViewById(R.id.btnGoToMain) // Initialize the new button
+        val btnGoToMain: Button = findViewById(R.id.btnGoToMain)
 
         recyclerView = findViewById(R.id.recycler_view_exercises)
         searchEditText = findViewById(R.id.searchEditText)
@@ -123,13 +116,13 @@ class SelectExercise : AppCompatActivity() {
             searchEditText.text.clear()
         }
         btnFullBody.setOnClickListener {
-            currentDisplayedCategory = "전신" // "전신" 카테고리만 표시
+            currentDisplayedCategory = "전신"
             displayExercises(currentDisplayedCategory)
             searchEditText.text.clear()
         }
-        btnAllExercises.setOnClickListener { // **새로 추가된 "전체" 버튼 리스너**
-            currentDisplayedCategory = "전체" // "전체" 카테고리로 설정
-            displayExercises(currentDisplayedCategory) // 모든 운동을 보여주도록 호출
+        btnAllExercises.setOnClickListener {
+            currentDisplayedCategory = "전체"
+            displayExercises(currentDisplayedCategory)
             searchEditText.text.clear()
         }
 
@@ -173,11 +166,11 @@ class SelectExercise : AppCompatActivity() {
             // Removed the Intent to ViewScheduleActivity
         }
 
-        // New button click listener for "Go to Main"
+        // 메인 화면으로 이동
         btnGoToMain.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java) // Assuming your main activity is MainActivity
             startActivity(intent)
-            finish() // Finish this activity so the user doesn't come back to it on back press
+            finish()
         }
     }
 
@@ -257,7 +250,7 @@ class SelectExercise : AppCompatActivity() {
 
     // 선택된 카테고리 또는 모든 운동 목록을 RecyclerView에 표시하는 함수
     private fun displayExercises(category: String) {
-        val exercisesToDisplay = if (category == "전체") { // "전체" 카테고리일 경우
+        val exercisesToDisplay = if (category == "전체") {
             allExercises // 모든 운동을 보여줍니다.
         } else {
             allExercises.filter { it.category == category } // 해당 카테고리 운동만 보여줍니다.

@@ -31,7 +31,7 @@ class ScheduleAdapter(
         holder.exerciseContainer.removeAllViews()
 
         groupedItem.sets.forEachIndexed { setIndex, exerciseSet ->
-            // 세트 제목 (예: "세트 1")
+            // 세트 제목
             val setTitle = TextView(holder.itemView.context).apply {
                 text = "세트 ${setIndex + 1}"
                 textSize = 16f
@@ -39,7 +39,7 @@ class ScheduleAdapter(
             }
             holder.exerciseContainer.addView(setTitle)
 
-            // 버튼들을 담을 수평 LinearLayout 추가
+            // 버튼들
             val buttonLayout = LinearLayout(holder.itemView.context).apply {
                 orientation = LinearLayout.HORIZONTAL
                 layoutParams = LinearLayout.LayoutParams(
@@ -59,7 +59,7 @@ class ScheduleAdapter(
                     setMargins(0, 8, 8, 16)
                 }
             }
-            // 클릭 시 onSetSelected 람다를 호출하여 ViewScheduleActivity에 선택 정보 전달
+            // 클릭 시 ViewScheduleActivity에 선택 정보 전달
             startSetButton.setOnClickListener {
                 onSetSelected(exerciseSet)
             }

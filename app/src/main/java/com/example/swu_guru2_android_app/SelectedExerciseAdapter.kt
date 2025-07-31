@@ -37,7 +37,7 @@ class SelectedExerciseAdapter(
     // 목록의 아이템 수 반환
     override fun getItemCount() = selectedExerciseList.size
 
-    // 데이터 변경 시 RecyclerView를 갱신하는 메서드 (추가)
+    // 데이터 변경 시 RecyclerView를 갱신
     fun updateList() {
         notifyDataSetChanged()
     }

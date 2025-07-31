@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         val goSelectExerciseBtn = findViewById<Button>(R.id.btn_go_select_exercise)
         goSelectExerciseBtn.setOnClickListener {
-            val intent = Intent(this, SelectExercise::class.java)
+            val intent = Intent(this, SelectExercise::class.java) // ✅ 운동 선택 화면으로 이동
             startActivity(intent)
         }
 

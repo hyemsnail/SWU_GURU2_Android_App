@@ -102,8 +102,6 @@ class TrainingActivity : AppCompatActivity() {
             updateCountDownText()
             updateNextButtonText() // 버튼 텍스트 업데이트
         } else {
-            // 이 블록은 모든 운동 완료 후 UI를 최종적으로 정리하는 역할만 합니다.
-            // ResultActivity로의 전환은 startTimer().onFinish() 또는 수동 전환에서 이루어집니다.
             tvExerciseName.text = "운동 완료!"
             tvTimer.text = "00:00"
             Toast.makeText(this, "모든 운동을 완료했습니다!", Toast.LENGTH_LONG).show()
@@ -154,7 +152,6 @@ class TrainingActivity : AppCompatActivity() {
                     // 쉬는 시간 타이머 종료 후 다음 운동으로 이동
                     currentExerciseIndex++
                     updateExerciseUI()
-                    // 쉬는 시간 후 다음 운동 자동 시작을 원하면 여기에 startTimer() 호출
                 }
             }
         }.start()
